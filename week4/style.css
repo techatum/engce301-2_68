@@ -197,3 +197,122 @@ section:hover h2 {
 html {
     scroll-behavior: smooth;
 }
+
+/* Responsive Images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Flexible Container */
+main {
+    max-width: 1000px;
+    margin: 3rem auto;
+    padding: 0 1rem; /* ลด padding บนมือถือ */
+}
+
+/* Tablet Styles (768px and down) */
+@media (max-width: 768px) {
+    /* Header adjustments */
+    header {
+        padding: 2rem 0;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    /* Navigation adjustments */
+    nav a {
+        margin: 0.25rem;
+        padding: 0.4rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Main content adjustments */
+    main {
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    
+    section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Profile image */
+    #about img {
+        width: 150px;
+    }
+}
+
+/* Mobile Styles (480px and down) */
+@media (max-width: 480px) {
+    /* Header adjustments */
+    header {
+        padding: 1.5rem 0;
+    }
+    
+    header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Navigation - Stack vertically */
+    nav {
+        margin-top: 1rem;
+    }
+    
+    nav a {
+        display: block;
+        margin: 0.5rem auto;
+        max-width: 200px;
+        text-align: center;
+    }
+    
+    /* Main content */
+    main {
+        margin: 1rem auto;
+        padding: 0 0.5rem;
+    }
+    
+    section {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.3rem;
+    }
+    
+    h3 {
+        font-size: 1.1rem;
+    }
+    
+    p, li {
+        font-size: 1rem;
+    }
+    
+    /* Profile image */
+    #about img {
+        width: 120px;
+    }
+    
+    /* Lists - reduce margin */
+    ul, ol {
+        margin-left: 1rem;
+    }
+    
+    /* Footer */
+    footer {
+        padding: 1.5rem 1rem;
+    }
+}
