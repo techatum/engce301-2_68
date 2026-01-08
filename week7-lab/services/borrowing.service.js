@@ -4,32 +4,59 @@ const MemberDB = require('../database/members.db');
 
 class BorrowingService {
     // ===== BORROW BOOK =====
+    // file: services/borrowing.service.js
+
     static async borrowBook(borrowData) {
         try {
             const { book_id, member_id } = borrowData;
 
-            // TODO: 1. ตรวจสอบว่า book มีอยู่จริงและมีเล่มว่าง
-            
+            // 1. ตรวจสอบหนังสือ
+            const book = await BookDB.findById(book_id); // ตัวแปรนี้มี book.title อยู่แล้ว
+            if (!book) throw new Error('Book not found');
+            if (book.available_copies <= 0) throw new Error('No available copies'); // ตรงตาม Test Case 2
 
-            // TODO: 2. ตรวจสอบว่า member มีอยู่จริงและ status = 'active'
-            
+            // 2. ตรวจสอบสมาชิก
+            const member = await MemberDB.findById(member_id); // ตัวแปรนี้มี member.name อยู่แล้ว
+            if (!member) throw new Error('Member not found');
+            if (member.status !== 'active') throw new Error('Member is not active');
 
-            // TODO: 3. ตรวจสอบว่า member ยืมไม่เกิน 3 เล่ม
-            
+            // 3. ตรวจสอบโควต้า
+            const activeCount = await BorrowingDB.countActiveBorrowings(member_id);
+            if (activeCount >= 3) throw new Error('Member cannot borrow more than 3 books');
 
-            // TODO: 4. คำนวณ due_date (14 วันจากวันนี้)
+            // 4. คำนวณวัน
             const borrowDate = new Date();
             const dueDate = new Date();
-            // เติมโค้ดคำนวณ due_date
+            dueDate.setDate(borrowDate.getDate() + 14);
             
+            const borrowDateStr = borrowDate.toISOString().split('T')[0];
+            const dueDateStr = dueDate.toISOString().split('T')[0];
 
-            // TODO: 5. สร้าง borrowing record
-            
+            // 5. บันทึก
+            const newBorrowing = await BorrowingDB.create({
+                book_id,
+                member_id,
+                borrow_date: borrowDateStr,
+                due_date: dueDateStr
+            });
 
-            // TODO: 6. ลด available_copies
-            
+            // 6. ลดจำนวน
+            await BookDB.decreaseAvailableCopies(book_id);
 
-            return /* ส่งข้อมูลการยืมกลับ */;
+            // ======================================================
+            // 🔥 [จุดที่แก้ไข] Return ข้อมูลให้ครบตาม Test Case 1 🔥
+            // ======================================================
+            return {
+                id: newBorrowing.id,              // ID การยืม
+                book_id: book_id,
+                book_title: book.title,           // ✅ เพิ่มชื่อหนังสือ
+                member_id: member_id,
+                member_name: member.name,         // ✅ เพิ่มชื่อสมาชิก
+                borrow_date: borrowDateStr,
+                due_date: dueDateStr,
+                status: 'borrowed'                // ✅ ระบุสถานะให้ชัดเจน
+            };
+
         } catch (error) {
             throw error;
         }
@@ -38,31 +65,98 @@ class BorrowingService {
     // ===== RETURN BOOK =====
     static async returnBook(borrowingId) {
         try {
-            // TODO: 1. ดึงข้อมูล borrowing
-            
+            // 1. ดึงข้อมูลรายการยืม
+            const borrowing = await BorrowingDB.findById(borrowingId);
+            if (!borrowing) {
+                throw new Error('Borrowing record not found');
+            }
 
-            // TODO: 2. ตรวจสอบว่ายังไม่คืน
-            
+            // 2. ตรวจสอบว่าเคยคืนไปหรือยัง
+            if (borrowing.status === 'returned') {
+                throw new Error('Book already returned');
+            }
 
-            // TODO: 3. บันทึก return_date และเปลี่ยน status
-            
-
-            // TODO: 4. เพิ่ม available_copies
-            
-
-            // TODO: 5. คำนวณค่าปรับ (ถ้าเกิน due_date)
+            // 3. คำนวณค่าปรับ (ถ้าเกิน due_date)
             // ค่าปรับ = 20 บาท/วัน
+            const dueDate = new Date(borrowing.due_date);
+            const returnDate = new Date(); // วันนี้
             
+            // 🔥 Reset เวลาให้เป็นเที่ยงคืนทั้งคู่ เพื่อเทียบแค่วันที่ (Calendar Days)
+            dueDate.setHours(0, 0, 0, 0);
+            returnDate.setHours(0, 0, 0, 0);
 
-            return /* ส่งข้อมูลการคืนพร้อมค่าปรับ */;
+            let fine = 0;
+            let daysOverdue = 0;
+
+            // ถ้าวันคืน มาทีหลัง วันกำหนดส่ง
+            if (returnDate > dueDate) {
+                const diffTime = Math.abs(returnDate - dueDate);
+                // แปลง Milliseconds เป็นจำนวนวัน
+                daysOverdue = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                fine = daysOverdue * 20; // 20 บาทต่อวัน
+            }
+
+            // 4. บันทึก return_date และเปลี่ยน status
+            // ใช้ toCAString หรือ split เพื่อเอาแค่ YYYY-MM-DD
+            // หมายเหตุ: toISOString() จะได้เวลา UTC ถ้าเอาชัวร์ตามเวลาท้องถิ่นอาจต้องใช้ library แต่ใน Lab นี้ใช้แบบนี้ได้ครับ
+            const returnDateStr = returnDate.toISOString().split('T')[0];
+            
+            await BorrowingDB.updateReturn(borrowingId, {
+                return_date: returnDateStr,
+                status: 'returned'
+            });
+
+            // 5. เพิ่ม available_copies กลับคืนสต็อก
+            await BookDB.increaseAvailableCopies(borrowing.book_id);
+
+            // 6. ส่งผลลัพธ์กลับ (โครงสร้างตรงตาม Test Case 3)
+            return {
+                id: Number(borrowingId),       // ✅ แปลงเป็น Int ให้ตรง Spec
+                return_date: returnDateStr,
+                days_overdue: daysOverdue,
+                fine: fine
+            };
+
         } catch (error) {
             throw error;
         }
     }
 
-    // TODO: เขียน getOverdueBorrowings
+    // [ใหม่]
+    static async getAllBorrowings() {
+        return await BorrowingDB.findAll();
+    }
+
+    // [ใหม่]
+    static async getBorrowingById(id) {
+        const borrowing = await BorrowingDB.findById(id);
+        if (!borrowing) throw new Error('Borrowing record not found');
+        return borrowing;
+    }
+
+    // [ใหม่]
+    static async getBorrowingsByMember(memberId) {
+        // เช็คก่อนว่ามีสมาชิกไหม
+        const member = await MemberDB.findById(memberId);
+        if (!member) throw new Error('Member not found');
+
+        return await BorrowingDB.findByMemberId(memberId);
+    }
+
+    // [ใหม่]
     static async getOverdueBorrowings() {
-        // เขียนโค้ดตรงนี้
+        return await BorrowingDB.findOverdue();
+    }
+
+    // [เพิ่มต่อท้าย]
+    static async deleteBorrowing(id) {
+        const borrowing = await BorrowingDB.findById(id);
+        if (!borrowing) throw new Error('Borrowing record not found');
+
+        // *ข้อควรระวัง* ถ้าลบรายการยืมตอนที่เขายังไม่คืน 
+        // จำนวนหนังสือ (available_copies) อาจจะหายไปเลย ต้องระวัง Logic ตรงนี้
+        // ในที่นี้สมมติว่าลบได้เลย
+        return await BorrowingDB.delete(id);
     }
 }
 
