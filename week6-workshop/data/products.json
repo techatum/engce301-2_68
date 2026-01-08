@@ -1,13 +1,5 @@
 [
   {
-    "id": 1,
-    "name": "iPhone 15 Pro",
-    "category": "Electronics",
-    "price": 42900,
-    "stock": 15,
-    "description": "Latest iPhone with A17 Pro chip"
-  },
-  {
     "id": 2,
     "name": "MacBook Air M2",
     "category": "Electronics",
@@ -22,5 +14,13 @@
     "price": 8990,
     "stock": 25,
     "description": "Active Noise Cancellation"
+  },
+  {
+    "id": 4,
+    "name": "iPad Air",
+    "category": "Electronics",
+    "price": 19900,
+    "stock": 12,
+    "description": "10.9-inch iPad Air"
   }
 ]
