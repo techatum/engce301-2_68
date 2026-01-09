@@ -77,7 +77,7 @@ exports.getOverdue = async (req, res) => {
     }
 };
 
-// [เพิ่มต่อท้าย]
+// ลบรายการยืม (Delete Borrowing)
 exports.delete = async (req, res) => {
     try {
         await BorrowingService.deleteBorrowing(req.params.id);

@@ -7,7 +7,6 @@ router.get('/:id', memberController.getById);
 router.post('/', memberController.create);
 router.put('/:id', memberController.update);
 
-// [เพิ่มต่อท้าย]
 router.delete('/:id', memberController.delete);
 
 module.exports = router;

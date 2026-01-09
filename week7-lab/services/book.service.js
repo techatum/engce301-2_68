@@ -1,7 +1,7 @@
 const BookDB = require('../database/books.db');
 
 class BookService {
-    
+
     static async getAllBooks() {
         return await BookDB.findAll();
     }
@@ -25,7 +25,7 @@ class BookService {
 
         // หมายเหตุ: การเช็ค ISBN ซ้ำ ปกติ SQLite จะ throw error ให้เองถ้าเรา set UNIQUE ไว้
         // แต่ถ้าจะเช็คก่อนก็ได้ครับ (ในที่นี้ปล่อยให้ DB จัดการ Error จะง่ายกว่า)
-        
+
         try {
             return await BookDB.create(bookData);
         } catch (error) {
@@ -45,13 +45,13 @@ class BookService {
         return await BookDB.update(id, bookData);
     }
 
-    // [ใหม่]
+    // ลบหนังสือ
     static async deleteBook(id) {
         const book = await BookDB.findById(id);
         if (!book) throw new Error('Book not found');
-        
+
         // (Optional) อาจจะเช็คเพิ่มว่าหนังสือเล่มนี้ถูกยืมอยู่ไหม ถ้าถูกยืมห้ามลบ
-        
+
         return await BookDB.delete(id);
     }
 }

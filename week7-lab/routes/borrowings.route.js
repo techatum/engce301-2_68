@@ -14,7 +14,7 @@ router.get('/member/:memberId', borrowingController.getByMember); // /api/borrow
 router.get('/', borrowingController.getAll);                  // /api/borrowings
 router.get('/:id', borrowingController.getById);              // /api/borrowings/1
 
-// [เพิ่มต่อท้าย]
+// 4. Delete Route
 router.delete('/:id', borrowingController.delete);
 
 module.exports = router;

@@ -36,7 +36,7 @@ exports.update = async (req, res) => {
     }
 };
 
-// [เพิ่มต่อท้าย]
+// ลบสมาชิก (Delete Member)
 exports.delete = async (req, res) => {
     try {
         await MemberService.deleteMember(req.params.id);

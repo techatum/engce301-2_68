@@ -21,20 +21,20 @@ db.exec(schema, (err) => {
         console.error('❌ Error:', err.message);
         process.exit(1);
     }
-    
+
     console.log('✅ Database created successfully');
-    
+
     // Verify
     db.all('SELECT COUNT(*) as count FROM books', (err, rows) => {
         if (!err) {
             console.log(`📚 Books: ${rows[0].count}`);
         }
-        
+
         db.all('SELECT COUNT(*) as count FROM members', (err, rows) => {
             if (!err) {
                 console.log(`👥 Members: ${rows[0].count}`);
             }
-            
+
             db.close();
             console.log('\n✅ Database initialization complete!\n');
         });

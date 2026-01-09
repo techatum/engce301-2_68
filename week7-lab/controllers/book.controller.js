@@ -47,12 +47,11 @@ exports.update = async (req, res) => {
     }
 };
 
-// [ใหม่]
-    exports.delete = async (req, res) => {
-        try {
-            await BookService.deleteBook(req.params.id);
-            res.json({ message: 'Book deleted successfully' });
-        } catch (error) {
-            res.status(404).json({ error: error.message });
-        }
-    };
+exports.delete = async (req, res) => {
+    try {
+        await BookService.deleteBook(req.params.id);
+        res.json({ message: 'Book deleted successfully' });
+    } catch (error) {
+        res.status(404).json({ error: error.message });
+    }
+};

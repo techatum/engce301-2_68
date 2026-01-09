@@ -31,12 +31,12 @@ class MemberService {
         return await MemberDB.update(id, memberData);
     }
 
-    // [เพิ่มต่อท้าย]
+    // ลบสมาชิก
     static async deleteMember(id) {
         // เช็คก่อนว่ามีสมาชิกไหม
         const member = await MemberDB.findById(id);
         if (!member) throw new Error('Member not found');
-        
+
         return await MemberDB.delete(id);
     }
 }

@@ -28,7 +28,7 @@ class BorrowingService {
             const borrowDate = new Date();
             const dueDate = new Date();
             dueDate.setDate(borrowDate.getDate() + 14);
-            
+
             const borrowDateStr = borrowDate.toISOString().split('T')[0];
             const dueDateStr = dueDate.toISOString().split('T')[0];
 
@@ -44,7 +44,7 @@ class BorrowingService {
             await BookDB.decreaseAvailableCopies(book_id);
 
             // ======================================================
-            // 🔥 [จุดที่แก้ไข] Return ข้อมูลให้ครบตาม Test Case 1 🔥
+            // 🔥 Return ข้อมูลให้ครบตาม Test Case 1 🔥
             // ======================================================
             return {
                 id: newBorrowing.id,              // ID การยืม
@@ -80,7 +80,7 @@ class BorrowingService {
             // ค่าปรับ = 20 บาท/วัน
             const dueDate = new Date(borrowing.due_date);
             const returnDate = new Date(); // วันนี้
-            
+
             // 🔥 Reset เวลาให้เป็นเที่ยงคืนทั้งคู่ เพื่อเทียบแค่วันที่ (Calendar Days)
             dueDate.setHours(0, 0, 0, 0);
             returnDate.setHours(0, 0, 0, 0);
@@ -92,7 +92,7 @@ class BorrowingService {
             if (returnDate > dueDate) {
                 const diffTime = Math.abs(returnDate - dueDate);
                 // แปลง Milliseconds เป็นจำนวนวัน
-                daysOverdue = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                daysOverdue = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 fine = daysOverdue * 20; // 20 บาทต่อวัน
             }
 
@@ -100,7 +100,7 @@ class BorrowingService {
             // ใช้ toCAString หรือ split เพื่อเอาแค่ YYYY-MM-DD
             // หมายเหตุ: toISOString() จะได้เวลา UTC ถ้าเอาชัวร์ตามเวลาท้องถิ่นอาจต้องใช้ library แต่ใน Lab นี้ใช้แบบนี้ได้ครับ
             const returnDateStr = returnDate.toISOString().split('T')[0];
-            
+
             await BorrowingDB.updateReturn(borrowingId, {
                 return_date: returnDateStr,
                 status: 'returned'
@@ -122,19 +122,19 @@ class BorrowingService {
         }
     }
 
-    // [ใหม่]
+    // ===== GET ALL BORROWINGS =====
     static async getAllBorrowings() {
         return await BorrowingDB.findAll();
     }
 
-    // [ใหม่]
+    // ===== GET BORROWING BY ID =====
     static async getBorrowingById(id) {
         const borrowing = await BorrowingDB.findById(id);
         if (!borrowing) throw new Error('Borrowing record not found');
         return borrowing;
     }
 
-    // [ใหม่]
+    // ===== GET BORROWINGS BY MEMBER ID =====
     static async getBorrowingsByMember(memberId) {
         // เช็คก่อนว่ามีสมาชิกไหม
         const member = await MemberDB.findById(memberId);
@@ -143,12 +143,12 @@ class BorrowingService {
         return await BorrowingDB.findByMemberId(memberId);
     }
 
-    // [ใหม่]
+    // ===== GET OVERDUE BORROWINGS =====
     static async getOverdueBorrowings() {
         return await BorrowingDB.findOverdue();
     }
 
-    // [เพิ่มต่อท้าย]
+    // ===== DELETE BORROWING =====
     static async deleteBorrowing(id) {
         const borrowing = await BorrowingDB.findById(id);
         if (!borrowing) throw new Error('Borrowing record not found');

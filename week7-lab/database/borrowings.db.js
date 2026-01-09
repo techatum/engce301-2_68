@@ -50,7 +50,7 @@ class BorrowingDatabase {
         });
     }
 
-    // [ใหม่] ดึงรายการยืมทั้งหมด (อาจจะ Join table เพื่อให้เห็นชื่อหนังสือ/คนยืมด้วยก็ได้)
+    // ดึงรายการยืมทั้งหมด (อาจจะ Join table เพื่อให้เห็นชื่อหนังสือ/คนยืมด้วยก็ได้)
     static findAll() {
         const sql = `
             SELECT b.*, bk.title as book_title, m.name as member_name 
@@ -67,7 +67,7 @@ class BorrowingDatabase {
         });
     }
 
-    // [ใหม่] ดึงรายการยืมของสมาชิกคนหนึ่ง
+    // ดึงรายการยืมของสมาชิกคนหนึ่ง
     static findByMemberId(memberId) {
         const sql = `
             SELECT b.*, bk.title as book_title 
@@ -84,7 +84,7 @@ class BorrowingDatabase {
         });
     }
 
-    // [ใหม่] หาหนังสือที่เกินกำหนด (Overdue)
+    // หาหนังสือที่เกินกำหนด (Overdue)
     static findOverdue() {
         const sql = `
             SELECT b.*, bk.title as book_title, m.name as member_name
@@ -101,7 +101,7 @@ class BorrowingDatabase {
         });
     }
 
-    // [เพิ่มต่อท้าย]
+    // ลบรายการยืม
     static delete(id) {
         return new Promise((resolve, reject) => {
             db.run('DELETE FROM borrowings WHERE id = ?', [id], function (err) {

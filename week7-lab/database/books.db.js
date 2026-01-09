@@ -108,7 +108,7 @@ class BookDatabase {
         });
     }
 
-    // [ใหม่] ลบหนังสือ
+    // ลบหนังสือ
     static delete(id) {
         return new Promise((resolve, reject) => {
             db.run('DELETE FROM books WHERE id = ?', [id], function (err) {
