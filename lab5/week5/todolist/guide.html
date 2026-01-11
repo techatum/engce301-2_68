@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
+
 <body>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <p>Click the button to create a Checkbox.</p>
 
-<p>Click the button to create a Checkbox.</p>
+  <button onclick="myFunction()">Try it</button>
 
-<button onclick="myFunction()">Try it</button>
-
-<script>
-function myFunction() {
-  var x = document.createElement("INPUT");
-  x.setAttribute("type", "checkbox");
-  document.body.appendChild(x);
-}
-</script>
+  <script>
+    function myFunction() {
+      var x = document.createElement("INPUT");
+      x.setAttribute("type", "checkbox");
+      document.body.appendChild(x);
+    }
+  </script>
 
 </body>
+
 </html>

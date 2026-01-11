@@ -6,7 +6,6 @@ const todoList = document.querySelector("#todo-list");
 let todos = [];
 
 function addTodo() {
-  //console.log("Hello, guys.");
   const todoText = todoInput.value.trim();
   if (todoText.length > 0) {
     const todo = {
@@ -14,25 +13,22 @@ function addTodo() {
       text: todoText,
       completed: false,
     };
-
     todos.push(todo);
-
     todoInput.value = "";
-
     renderTodos();
   }
 }
 
+// 1. เพิ่ม Alert ยืนยันก่อนลบ
 function deleteTodo(id) {
-  //console.log(id);
-  todos = todos.filter((todo) => todo.id !== id);
-  renderTodos();
+  const isConfirmed = confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้?");
+  if (isConfirmed) {
+    todos = todos.filter((todo) => todo.id !== id);
+    renderTodos();
+  }
 }
 
 function toggleCompleted(id) {
-  // console.log(id);
-  //let a = 1;
-  //a = a + 1; //a = 2
   todos = todos.map((todo) => {
     if (todo.id === id) {
       todo.completed = !todo.completed;
@@ -49,23 +45,33 @@ function renderTodos() {
     const todoItem = document.createElement("li");
     const todoText = document.createElement("span");
     const todoDeleteButton = document.createElement("button");
-    const myCheck = document.createElement("INPUT");
-          myCheck.setAttribute("type", "checkbox");
+
+    // 2. สร้าง Checkbox และกำหนดสถานะ
+    const myCheck = document.createElement("input");
+    myCheck.setAttribute("type", "checkbox");
+    myCheck.checked = todo.completed; // ติ๊กถูกตามสถานะจริง
 
     todoText.textContent = todo.text;
     todoDeleteButton.textContent = "Delete";
 
-    todoDeleteButton.addEventListener("click", () => deleteTodo(todo.id));
+    // จัดการ Event สำหรับปุ่มลบ (หยุดการสะท้อน event ไปยัง li)
+    todoDeleteButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteTodo(todo.id);
+    });
 
+    // ตรวจสอบสถานะเพื่อขีดฆ่าข้อความ
     if (todo.completed) {
       todoItem.classList.add("completed");
     }
 
+    // เมื่อคลิกที่รายการ (li) ให้สลับสถานะ
     todoItem.addEventListener("click", () => toggleCompleted(todo.id));
-  
+
+    // ใส่ Element ลงใน li
+    todoItem.appendChild(myCheck);
     todoItem.appendChild(todoText);
     todoItem.appendChild(todoDeleteButton);
-
 
     todoList.appendChild(todoItem);
   });

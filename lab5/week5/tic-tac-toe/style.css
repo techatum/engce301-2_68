@@ -3,36 +3,75 @@
  https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
 **/
 :root {
-    --grid-size: 450px;
-    --margin-size: 10px;
-    --square-size: calc((var(--grid-size) / 3) - var(--margin-size));
-  }
-  
-  body {
-    font-family: sans-serif;
-  }
-  
-  #grid {
-    align-content: space-between;
-    background-color: rgba(0,0,0,0.5);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    height: var(--grid-size);
-    width: var(--grid-size);
-  }
-  
-  #grid div {
-    background-color: white;
-    height: var(--square-size);
-    width: var(--square-size);
-  
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #grid div img {
-    width: 100%;
-  }
-  
+  --grid-size: 450px;
+  --margin-size: 10px;
+  --square-size: calc((var(--grid-size) / 3) - var(--margin-size));
+}
+
+body {
+  font-family: sans-serif;
+}
+
+#grid {
+  align-content: space-between;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  height: var(--grid-size);
+  width: var(--grid-size);
+}
+
+#grid div {
+  background-color: white;
+  height: var(--square-size);
+  width: var(--square-size);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#grid div img {
+  width: 100%;
+}
+
+#grid div {
+  width: var(--square-size);
+  height: var(--square-size);
+  border: 2px solid #ff0000;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#grid div img {
+  width: 80%;
+  /* ให้รูปภาพไม่เต็มช่องจนเกินไป */
+}
+
+#reset-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff4757;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#reset-btn:hover {
+  background-color: #ff6b81;
+}
+
+.x-color {
+
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(5000%) hue-rotate(350deg);
+}
+
+.o-color {
+
+  filter: brightness(0) saturate(100%) invert(30%) sepia(100%) saturate(5000%) hue-rotate(210deg);
+}
