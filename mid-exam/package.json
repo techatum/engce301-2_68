@@ -1,0 +1,23 @@
+{
+    "name": "meeting-room-booking",
+    "version": "1.0.0",
+    "description": "Midterm Exam - Practical: Meeting Room Booking System",
+    "main": "student_id_express_routes.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node student_id_express_routes.js",
+        "init-db": "node init-db.js"
+    },
+    "keywords": [
+        "express",
+        "sqlite",
+        "api"
+    ],
+    "author": "Student ID",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "sqlite3": "^5.1.7"
+    }
+}
