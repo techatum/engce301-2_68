@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Board - Monolithic Architecture</title>
+    <title>Task Board - Client-Server</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,9 +12,12 @@
              HEADER SECTION
              ======================================== -->
         <header>
-            <h1>📋 Task Board</h1>
-            <p class="subtitle">Monolithic Architecture Demo - Week 4</p>
-        </header>
+        <h1>📋 Task Board - Client-Server Architecture</h1>
+        <div id="serverStatus" class="status-bar">
+            <span id="statusIndicator">🔴</span>
+            <span id="statusText">กำลังเชื่อมต่อ server...</span>
+        </div>
+    </header>
 
         <!-- ========================================
              ADD TASK FORM SECTION
@@ -126,6 +127,7 @@
     <!-- ========================================
          JAVASCRIPT
          ======================================== -->
+    <script src="config.js"></script>
     <script src="app.js"></script>
 </body>
 
